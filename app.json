@@ -3,13 +3,16 @@
     "name": "Tone",
     "slug": "Tone",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "potrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#F5F8F4"
+    },
+    "extra": {
+      "apiUrl": "http://192.168.50.86:3000"
     },
     "ios": {
       "supportsTablet": true
@@ -17,11 +20,12 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#F5F8F4"
       }
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": ["expo-font", "expo-secure-store"]
   }
 }
