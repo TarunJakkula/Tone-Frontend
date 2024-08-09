@@ -1,6 +1,8 @@
+// AuthScreen.tsx
 import React, { useState } from "react";
 import {
   Image,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
@@ -9,31 +11,43 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { signIn } from "../util/auth";
-import { storeToken } from "../util/secureStore";
+import { storeRefreshToken, storeToken, storeUser } from "../util/secureStore";
 import {
-  accentColor,
   backgroundColor,
   primaryColor,
   secondaryColor,
   textColor,
 } from "../ui/colors";
+import { printSecureScore } from "../util/viewSecureSore";
 
-export default function AuthScreen({ navigation }) {
+export default function AuthScreen({ navigation }: { navigation: any }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<null | string>(null);
 
   const handleLogin = async () => {
     try {
+      //api call to backend
       const token = await signIn(email, password);
-      if (token === "Error") throw Error("Error");
-      await storeToken(JSON.stringify(token));
-      // Navigate to the home screen or handle login success
-      // navigation.navigate('Home');
+
+      //login failed
+      if (token === "Error") throw new Error("Login failed");
+
+      //set accessToken
+      await storeToken(token.accessToken);
+
+      //set refreshToken
+      await storeRefreshToken(token.refreshToken);
+
+      //set userData
+      await storeUser(JSON.stringify(token.user));
+      // await printSecureScore("After login");
+      navigation.replace("HomeScreen");
       setEmail("");
       setPassword("");
     } catch (error) {
       setError("Login failed. Please check your credentials.");
+      console.error("Login error:", error);
     }
   };
 
@@ -42,9 +56,7 @@ export default function AuthScreen({ navigation }) {
       <View style={styles.header}>
         <TouchableOpacity
           activeOpacity={0.8}
-          onPress={() => {
-            navigation.goBack();
-          }}
+          onPress={() => navigation.goBack()}
           style={styles.backButton}
         >
           <Image
@@ -66,7 +78,7 @@ export default function AuthScreen({ navigation }) {
           <View style={styles.inputWrapper}>
             <Text style={styles.labelText}>Email</Text>
             <TextInput
-              style={styles.emailInput}
+              style={styles.Input}
               cursorColor={secondaryColor}
               value={email}
               onChangeText={setEmail}
@@ -77,7 +89,7 @@ export default function AuthScreen({ navigation }) {
           <View style={styles.inputWrapper}>
             <Text style={styles.labelText}>Password</Text>
             <TextInput
-              style={styles.emailInput}
+              style={styles.Input}
               cursorColor={secondaryColor}
               secureTextEntry={true}
               value={password}
@@ -133,7 +145,7 @@ const styles = StyleSheet.create({
     objectFit: "contain",
   },
   formContainer: {
-    backgroundColor: "#ffffff",
+    backgroundColor: "#000000",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     width: "100%",
@@ -150,9 +162,9 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   quoteText: {
-    fontFamily: "PlayWrite",
+    fontFamily: "RaleWayBold",
     color: textColor,
-    fontSize: 40,
+    fontSize: 30,
   },
   inputContainer: {
     width: "100%",
@@ -167,7 +179,8 @@ const styles = StyleSheet.create({
     color: textColor,
     fontSize: 22,
   },
-  emailInput: {
+  Input: {
+    color: textColor,
     backgroundColor: "#00000000",
     borderBottomWidth: 2,
     borderBottomColor: textColor + "bb",
@@ -193,7 +206,7 @@ const styles = StyleSheet.create({
   loginButtonText: {
     fontFamily: "WorkSans",
     fontSize: 20,
-    color: "#fefefe",
+    color: textColor,
   },
   errorText: {
     color: "red",

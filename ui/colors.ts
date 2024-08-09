@@ -1,8 +1,8 @@
-const textColor = "#130404";
-const backgroundColor = "#fcfbfb";
-const primaryColor = "#d43638";
-const secondaryColor = "#e5ba85";
-const accentColor = "#dfc468";
+const textColor = "#ffffff";
+const backgroundColor = "#121212";
+const primaryColor = "#6aeafe";
+const secondaryColor = "#a40267";
+const accentColor = "#fd4e22";
 
 export {
   textColor,

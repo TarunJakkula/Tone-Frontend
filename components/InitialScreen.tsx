@@ -150,7 +150,7 @@ export default function ({ navigation }) {
         </View>
       </SafeAreaView>
 
-      <ExpoStatusBar style="dark" />
+      <ExpoStatusBar style="light" />
     </>
   );
 }
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   },
   Text: {
     color: textColor,
-    fontFamily: "PlayWrite",
+    fontFamily: "RaleWayBold",
     fontSize: 55,
     flexDirection: "row", // Ensures letters are aligned in a row
   },
